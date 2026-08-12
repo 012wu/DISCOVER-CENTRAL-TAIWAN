@@ -70,12 +70,12 @@ class AdminAttractionController extends Controller
         // 排序方式
         $rank = $req->input('rank');
         switch ($rank) {
-            case '景點編號（小到大）':
-                $query->orderBy('attractionid');
-                break;
-            case '名稱 (筆劃少到多)':
-                $query->orderBy('attractionName');
-                break;
+            case '景點編號（小->大）':
+                $query->orderByRaw('CAST(attractionid AS UNSIGNED) ASC');
+            break;
+            case '名稱 (筆劃少->多)':
+             $query->orderBy('attractionName', 'asc');
+    break;
             case '最新上架':
                 $query->orderByDesc('createTime');
                 break;

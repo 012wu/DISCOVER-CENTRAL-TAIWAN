@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>後臺管理系統</title>
+    <title>@yield('title', '後臺管理系統')</title>
     {{-- Font Awesome --}}
     <link rel="stylesheet" href="../css/all.min.css">
     {{-- bootstrap --}}
@@ -25,7 +25,7 @@
             {{-- router-link點擊導到首頁 --}}
             <a href="/home"><i class="fa-solid fa-left-long"></i> 返回首頁</a>
             @if (!empty(session()->get('account')))
-            <button class="btn-logout" @click="logout">管理員登出</button>
+                <button class="btn-logout" @click="logout">管理員登出</button>
             @endif
         </div>
         {{-- 將sidebar跟右邊內文並台再一起，父層為layout 用flex --}}
@@ -151,8 +151,15 @@
                             vm.loading = false;
 
                             if (response.success) {
-                                // 登入出成功，跳回首頁
-                                location.href = "/home"
+                                Swal.fire({
+                                    title: "登出成功",
+                                    text: "已登出",
+                                    icon: "success",
+                                    timer: 1000,
+                                    showConfirmButton: false
+                                }).then(() => {
+                                    location.href = "/home";
+                                });
                             } else {
                                 Swal.fire({
                                     title: "登出失敗",

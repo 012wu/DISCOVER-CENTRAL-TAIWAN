@@ -57,13 +57,13 @@ class AdminRestaurantClassController extends Controller
         // 排序方式
         $rank = $req->input('rank');
         switch ($rank) {
-            case '分類代碼（小到大）':
+            case '分類代碼（小->大）':
                 $query->orderBy('restaurantClassNo');
                 break;
-            case '名稱 (筆劃少到多)':
+            case '名稱 (筆劃少->多)':
                 $query->orderBy('restaurantClassName');
                 break;
-            case '名稱 (筆劃多到少)':
+            case '名稱 (筆劃多->少)':
                 $query->orderByDesc('restaurantClassName');
                 break;
             default:
@@ -76,7 +76,7 @@ class AdminRestaurantClassController extends Controller
 
         // 分頁
         $list = $query->paginate($pageSize)->withQueryString();
-        // 把 $list 傳到 restaurantClass.blade.php
+        // 把 $list 傳-> restaurantClass.blade.php
         return view('admin.restaurantClass', compact('list'));
     }
 

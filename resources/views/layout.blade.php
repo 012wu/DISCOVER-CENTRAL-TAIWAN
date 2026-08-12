@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>首頁</title>
+    <title>@yield('title', '首頁')</title>
     {{-- Font Awesome --}}
     <link rel="stylesheet" href="css/all.min.css">
     {{-- bootstrap --}}
@@ -16,32 +16,40 @@
 <body>
     <div class="front" id="app">
         {{-- 導覽列 --}}
-        <section class="navbar-custom" id="siteHeader">
-            {{-- Logo --}}
-            <img src="img/logo-others.svg" class="logo" alt="中彰投生活圈">
-            {{-- 導覽選單 --}}
-            <nav class="nav-link-custom">
-                <a href="/home" class="">
-                    <i class="fa-regular fa-house"></i>
-                    <span>首頁</span>
-                </a>
-                <a href="/attraction" class="">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <span>景點</span>
-                </a>
-                <a href="/hotel" class="">
-                    <i class="fa-solid fa-bed"></i>
-                    <span>旅宿</span>
-                </a>
-                <a href="/restaurant" class="">
-                    <i class="fa-solid fa-utensils"></i>
-                    <span>餐飲</span>
-                </a>
-            </nav>
-            {{-- 搜尋框 --}}
-            <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" placeholder="關鍵字搜尋" v-model="keyword">
+        <section class="navbar-custom navbar navbar-expand-md" id="siteHeader">
+            <a href="#" class="navbar-brand-custom" aria-label="中彰投生活圈首頁">
+                <img src="img/logoothers.svg" class="logoothers" alt="中彰投生活圈">
+            </a>
+            <button class="navbar-toggler nav-toggle" type="button" data-bs-toggle="collapse"
+                data-bs-target="#primaryNav" aria-controls="primaryNav" aria-expanded="false" aria-label="切換導覽選單">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="collapse navbar-collapse" id="primaryNav">
+                <nav class="nav-link-custom" aria-label="主要導覽">
+                    <a href="/home" class="{{ request()->is('home') ? 'active' : '' }}" {!! request()->is('home') ? 'aria-current="page"' : '' !!}>
+                        <i class="fa-regular fa-house"></i>
+                        <span>首頁</span>
+                    </a>
+                    <a href="/attraction" class="{{ request()->is('attraction') ? 'active' : '' }}"
+                        {!! request()->is('attraction') ? 'aria-current="page"' : '' !!}>
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>景點</span>
+                    </a>
+                    <a href="/hotel" class="{{ request()->is('hotel') ? 'active' : '' }}" {!! request()->is('hotel') ? 'aria-current="page"' : '' !!}>
+                        <i class="fa-solid fa-bed"></i>
+                        <span>旅宿</span>
+                    </a>
+                    <a href="/restaurant" class="{{ request()->is('restaurant') ? 'active' : '' }}"
+                        {!! request()->is('restaurant') ? 'aria-current="page"' : '' !!}>
+                        <i class="fa-solid fa-utensils"></i>
+                        <span>餐飲</span>
+                    </a>
+                </nav>
+                {{-- 搜尋框 --}}
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="關鍵字搜尋" v-model="keyword">
+                </div>
             </div>
 
         </section>
@@ -75,19 +83,19 @@
             <div class="container">
                 <div class="footer-top">
                     <div class="footer-logo">
-                        <img src="img/logo-landingpage.svg" class="" alt="中彰投生活圈">
+                        <img src="img/logolandingpage.svg" class="" alt="中彰投生活圈">
                     </div>
                     <div class="footer-links">
                         <a href="/about">關於我們</a>
                         <a href="#" data-bs-toggle="modal" data-bs-target="#contactModal">聯絡我們</a>
                         @if (empty(session()->get('account')))
-                        <a href="/admin/login" class="admin-link">管理員登入</a>
+                            <a href="/admin/login" class="admin-link">管理員登入</a>
                         @endif
                         @if (!empty(session()->get('account')))
-                        <a href="/admin/login" class="admin-link">管理員登出</a>
+                            <a href="#" class="admin-link" @click="logout">管理員登出</a>
                         @endif
                         @if (!empty(session()->get('account')))
-                        <a href="/admin/adminhome" class="admin-link">後臺管理系統</a>
+                            <a href="/admin/adminhome" class="admin-link">後臺管理系統</a>
                         @endif
                     </div>
                 </div>
@@ -193,7 +201,54 @@
                 vm.searchData();
             },
             methods: {
+                logout() {
+                    // 先把 this 存起來，因為進到 ajax 的 function 裡面 this 會改變，
+                    // 所以要先存一份給 vm，之後在裡面才能繼續用 vm.xxx 存取 data 的資料
+                    const vm = this;
+                    $.ajax({
+                        url: "/admin/logout",
+                        method: "POST",
+                        dataType: "json",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                        },
+                        //驗證成功
+                        success: function(response) {
+                            console.log(response);
+                            vm.loading = false;
 
+                            if (response.success) {
+                                Swal.fire({
+                                    title: "登出成功",
+                                    text: "已登出",
+                                    icon: "success",
+                                    timer: 1000,
+                                    showConfirmButton: false
+                                }).then(() => {
+                                    location.href = "/home";
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: "登出失敗",
+                                    text: "請稍後再試",
+                                    icon: "error"
+                                });
+                            }
+
+                        },
+                        //系統錯誤
+                        error: function(error) {
+                            console.log(error);
+                            Swal.fire({
+                                title: "發生錯誤",
+                                text: "請稍後再試",
+                                icon: "error"
+                            });
+
+                        }
+
+                    })
+                },
                 getAttractionList() {
                     const vm = this;
 
@@ -288,7 +343,6 @@
                 searchData() {
                     const vm = this;
                     vm.currentPage = 1;
-
                     let source = [];
                     if (location.pathname === "/attraction") source = vm.attractionList;
                     else if (location.pathname === "/hotel") source = vm.hotelList;
@@ -297,20 +351,47 @@
                     vm.filter = source.filter(function(item) {
                         if (vm.selectedCity != "" && item.city != vm.selectedCity) return false;
 
-                        const category = item.attractionClassName2 || item.hotelClassName || item.restaurantClassName || "";
+                        const category = item.attractionClassName2 || item.hotelClassName || item
+                            .restaurantClassName || "";
                         if (vm.selectedCategory != "" && category != vm.selectedCategory) return false;
 
                         if (vm.keyword != "") {
                             const keyword = vm.keyword.toLowerCase();
                             const name = item.attractionName || item.hotelName || item.restaurantName || "";
                             const description = item.description || "";
-                            if (!name.toLowerCase().includes(keyword) && !description.toLowerCase().includes(keyword)) {
+                            if (!name.toLowerCase().includes(keyword) &&
+                                !description.toLowerCase().includes(keyword) &&
+                                !category.toLowerCase().includes(keyword)) {
                                 return false;
                             }
                         }
                         return true;
                     });
-                    // 排序邏輯同理要改成用通用欄位或判斷頁面...
+
+                    vm.filter.sort(function(a, b) {
+                        if (vm.selectedRank === "最多瀏覽人次") {
+                            const aViews = Number(a.viewCount || a.views || a.browseCount || a.view || 0);
+                            const bViews = Number(b.viewCount || b.views || b.browseCount || b.view || 0);
+                            return bViews - aViews;
+                        }
+
+                        if (vm.selectedRank === "名稱 (筆劃少到多)") {
+                            const aName = a.attractionName || a.hotelName || a.restaurantName || "";
+                            const bName = b.attractionName || b.hotelName || b.restaurantName || "";
+                            return aName.localeCompare(bName, "zh-Hant", {
+                                usage: "sort",
+                                collation: "stroke"
+                            });
+                        }
+
+                        if (vm.selectedRank === "最新上架") {
+                            const aDate = a.created_at || a.createdAt || a.publishDate || a.createDate || "";
+                            const bDate = b.created_at || b.createdAt || b.publishDate || b.createDate || "";
+                            return new Date(bDate) - new Date(aDate);
+                        }
+
+                        return 0;
+                    });
                 },
                 showDetail(item) {
                     const vm = this;
@@ -363,7 +444,8 @@
                         relatedList.innerHTML = "<div class='text-muted'>附近暫無其他資料</div>";
                     } else {
                         related.forEach(function(other) {
-                            const otherName = other.attractionName || other.hotelName || other.restaurantName || "-";
+                            const otherName = other.attractionName || other.hotelName || other.restaurantName ||
+                                "-";
                             relatedList.innerHTML += `
         <div class="col-md-6">
             <a href="${other.websiteURL || '#'}" target="_blank" class="related-card">

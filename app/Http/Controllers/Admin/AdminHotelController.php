@@ -70,10 +70,10 @@ class AdminhotelController extends Controller
         // 排序方式
         $rank = $req->input('rank');
         switch ($rank) {
-            case '景點編號（小到大）':
+            case '景點編號（小->大）':
                 $query->orderBy('hotelid');
                 break;
-            case '名稱 (筆劃少到多)':
+            case '名稱 (筆劃少->多)':
                 $query->orderBy('hotelName');
                 break;
             case '最新上架':
@@ -91,7 +91,7 @@ class AdminhotelController extends Controller
         $list = $query->paginate($pageSize)->withQueryString();
 
 
-        // 把 $list 傳到 hotel.blade.php
+        // 把 $list 傳-> hotel.blade.php
         return view('admin.hotel', compact('list'));
     }
 

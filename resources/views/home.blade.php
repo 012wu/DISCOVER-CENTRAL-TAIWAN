@@ -5,43 +5,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>中彰投生活圈/首頁</title>
-    {{--Font Awesome --}}
+    {{-- Font Awesome --}}
     <link rel="stylesheet" href="css/all.min.css">
-    {{--bootstrap --}}
+    {{-- bootstrap --}}
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    {{--google front --}}
+    {{-- google front --}}
     <link rel="stylesheet" href="css/front.css">
 </head>
 
 <body>
     <div class="front" id="app">
-        {{--導覽列 --}}
-        <section class="navbar-custom" id="siteHeader">
-            {{--Logo --}}
-            <img src="img/logo-others.svg" class="logo" alt="中彰投生活圈">
-            {{--導覽選單 --}}
-            <nav class="nav-link-custom">
-                <a href="/home" class="">
-                    <i class="fa-regular fa-house"></i>
-                    <span>首頁</span>
-                </a>
-                <a href="/attraction" class="">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <span>景點</span>
-                </a>
-                <a href="/hotel" class="">
-                    <i class="fa-solid fa-bed"></i>
-                    <span>旅宿</span>
-                </a>
-                <a href="/restaurant" class="">
-                    <i class="fa-solid fa-utensils"></i>
-                    <span>餐飲</span>
-                </a>
-            </nav>
-            {{--搜尋框 --}}
-            <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" placeholder="關鍵字搜尋" v-model="keyword">
+        {{-- 導覽列 --}}
+        <section class="navbar-custom navbar navbar-expand-md" id="siteHeader">
+            <a href="/home" class="navbar-brand-custom" aria-label="中彰投生活圈首頁">
+                <img src="img/logoothers.svg" class="logoothers" alt="中彰投生活圈">
+            </a>
+            <button class="navbar-toggler nav-toggle" type="button" data-bs-toggle="collapse"
+                data-bs-target="#primaryNav" aria-controls="primaryNav" aria-expanded="false" aria-label="切換導覽選單">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="collapse navbar-collapse" id="primaryNav">
+                <nav class="nav-link-custom" aria-label="主要導覽">
+                    <a href="/home" class="active" aria-current="page">
+                        <i class="fa-regular fa-house"></i>
+                        <span>首頁</span>
+                    </a>
+                    <a href="/attraction" class="">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>景點</span>
+                    </a>
+                    <a href="/hotel" class="">
+                        <i class="fa-solid fa-bed"></i>
+                        <span>旅宿</span>
+                    </a>
+                    <a href="/restaurant" class="">
+                        <i class="fa-solid fa-utensils"></i>
+                        <span>餐飲</span>
+                    </a>
+                </nav>
+                {{-- 搜尋框 --}}
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="關鍵字搜尋" v-model="keyword">
+                </div>
             </div>
 
         </section>
@@ -77,9 +83,9 @@
                 </div>
             </div>
             <div class="hero-dots">
-                <button class="hero-dot active" data-slide="0" aria-label="第0張"></button>
-                <button class="hero-dot" data-slide="1" aria-label="第1張"></button>
-                <button class="hero-dot" data-slide="2" aria-label="第2張"></button>
+                <button class="hero-dot active" data-slide="0" aria-label="切換至第 1 張輪播圖片"><span>01</span></button>
+                <button class="hero-dot" data-slide="1" aria-label="切換至第 2 張輪播圖片"><span>02</span></button>
+                <button class="hero-dot" data-slide="2" aria-label="切換至第 3 張輪播圖片"><span>03</span></button>
             </div>
         </section>
         <section class="city" id="city">
@@ -130,13 +136,14 @@
                         <a :href="event.websiteURL" target="_blank">
                             <div class="event-thumb"
                                 :style="{
-                                backgroundImage: 'url(' + event.photo[0].uRL + ')'
-                            }">
+                                    backgroundImage: 'url(' + event.photo[0].uRL + ')'
+                                }">
                             </div>
                             <div class="event-body">
                                 <h4 class="fw-bold">[[ event . eventName ]]</h4>
                                 <!-- 只抓80個字 -->
-                                <p>[[ event . description . length > 80 ? event . description . slice(0, 80) + '...' : event .
+                                <p>[[ event . description . length > 80 ? event . description . slice(0, 80) + '...' :
+                                    event .
                                     description ]]
                                 </p>
                                 <div class="event-date">
@@ -170,6 +177,11 @@
 
         <section class="weather-section" id="stay">
             <div class="container">
+                <div class="home-section-heading">
+                    <span>TRAVEL WEATHER</span>
+                    <h2>出發前，先看看天氣</h2>
+                    <p>掌握中彰投即時天氣，從容安排每一段旅程。</p>
+                </div>
                 <div class="weather-grid">
                     <div class="weather-card reveal reveal-delay-1">
                         <div class="weather-left">
@@ -205,44 +217,61 @@
                     </div>
                 </div>
 
+                <div class="partners-heading">
+                    <span>TRAVEL RESOURCES</span>
+                    <h2>旅遊資源與合作夥伴</h2>
+                </div>
                 <div class="partners-row reveal" id="food">
-                    <a href="https://www.taiwan.net.tw/">
+                    <a href="https://www.taiwan.net.tw/" aria-label="台灣觀光資訊網" target="_blank"
+                        rel="noopener noreferrer">
                         <div class="partner-logo" style="background-image: url(img/icon1.png);"></div>
                     </a>
-                    <a href="https://www.sunmoonlake.gov.tw/">
+                    <a href="https://www.sunmoonlake.gov.tw/" aria-label="日月潭國家風景區" target="_blank"
+                        rel="noopener noreferrer">
                         <div class="partner-logo" style="background-image: url(img/icon2.png);"></div>
                     </a>
-                    <a href="https://www.trimt-nsa.gov.tw/zh-tw/">
+                    <a href="https://www.trimt-nsa.gov.tw/zh-tw/" aria-label="參山國家風景區" target="_blank"
+                        rel="noopener noreferrer">
                         <div class="partner-logo" style="background-image: url(img/icon3.png);"></div>
                     </a>
-                    <a href="https://recreation.forest.gov.tw/">
+                    <a href="https://recreation.forest.gov.tw/" aria-label="台灣山林悠遊網" target="_blank"
+                        rel="noopener noreferrer">
                         <div class="partner-logo" style="background-image: url(img/icon4.png);"></div>
                     </a>
-                    <a href="https://ezgo.ardswc.gov.tw/en/">
+                    <a href="https://ezgo.ardswc.gov.tw/en/" aria-label="農業易遊網" target="_blank"
+                        rel="noopener noreferrer">
                         <div class="partner-logo" style="background-image: url(img/icon5.png);"></div>
                     </a>
-                    <a href="https://travel.taichung.gov.tw/">
+                    <a href="https://travel.taichung.gov.tw/" aria-label="台中觀光旅遊網" target="_blank"
+                        rel="noopener noreferrer">
                         <div class="partner-logo" style="background-image: url(img/icon6.png);"></div>
                     </a>
-                    <a href="https://tourism.chcg.gov.tw/">
+                    <a href="https://tourism.chcg.gov.tw/" aria-label="彰化旅遊資訊網" target="_blank"
+                        rel="noopener noreferrer">
                         <div class="partner-logo" style="background-image: url(img/icon7.png);"></div>
                     </a>
-                    <a href="https://travel.nantou.gov.tw/">
+                    <a href="https://travel.nantou.gov.tw/" aria-label="南投旅遊網" target="_blank"
+                        rel="noopener noreferrer">
                         <div class="partner-logo" style="background-image: url(img/icon1\ \(1\).png);"></div>
                     </a>
-                    <a href="https://www.taiwantrip.com.tw/">
+                    <a href="https://www.taiwantrip.com.tw/" aria-label="台灣好行" target="_blank"
+                        rel="noopener noreferrer">
                         <div class="partner-logo" style="background-image: url(img/icon2\ \(1\).png);"></div>
                     </a>
-                    <a href="https://www.taiwantourbus.com.tw/C/us/home">
+                    <a href="https://www.taiwantourbus.com.tw/C/us/home" aria-label="台灣觀巴" target="_blank"
+                        rel="noopener noreferrer">
                         <div class="partner-logo" style="background-image: url(img/icon3\ \(1\).png);"></div>
                     </a>
-                    <a href="https://www.taiwanstay.net.tw/TSA/web_html/index.html">
+                    <a href="https://www.taiwanstay.net.tw/TSA/web_html/index.html" aria-label="台灣旅宿網"
+                        target="_blank" rel="noopener noreferrer">
                         <div class="partner-logo" style="background-image: url(img/icon4\ \(1\).png);"></div>
                     </a>
-                    <a href="https://guide.michelin.com/tw/zh_TW">
+                    <a href="https://guide.michelin.com/tw/zh_TW" aria-label="米其林指南" target="_blank"
+                        rel="noopener noreferrer">
                         <div class="partner-logo" style="background-image: url(img/icon5\ \(1\).png);"></div>
                     </a>
-                    <a href="https://camp.tad.gov.tw/CMA/web_page/CMA010100.jsp">
+                    <a href="https://camp.tad.gov.tw/CMA/web_page/CMA010100.jsp" aria-label="露營場資訊平台" target="_blank"
+                        rel="noopener noreferrer">
                         <div class="partner-logo" style="background-image: url(img/icon6\ \(1\).png);">露營場資訊平台</div>
                     </a>
 
@@ -259,14 +288,14 @@
                     <div class="footer-links">
                         <a href="/about">關於我們</a>
                         <a href="#" data-bs-toggle="modal" data-bs-target="#contactModal">聯絡我們</a>
-                        @if(empty(session()->get("account")))
-                        <a href="/admin/login" class="admin-link">管理員登入</a>
+                        @if (empty(session()->get('account')))
+                            <a href="/admin/login" class="admin-link">管理員登入</a>
                         @endif
-                        @if(!empty(session()->get("account")))
-                        <a href="/admin/login" class="admin-link">管理員登出</a>
+                        @if (!empty(session()->get('account')))
+                            <a href="#" class="admin-link" @click="logout">管理員登出</a>
                         @endif
-                        @if(!empty(session()->get("account")))
-                        <a href="/admin/adminhome" class="admin-link">後臺管理系統</a>
+                        @if (!empty(session()->get('account')))
+                            <a href="/admin/adminhome" class="admin-link">後臺管理系統</a>
                         @endif
                     </div>
                 </div>
@@ -278,8 +307,9 @@
         <button class="back-to-top" id="backToTop" aria-label="回到頂部">
             <i class="fa-regular fa-circle-up" style="color: rgb(97, 167, 146);"></i>
         </button>
-        {{--聯絡我們彈跳視窗 --}}
-        <div class="modal" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+        {{-- 聯絡我們彈跳視窗 --}}
+        <div class="modal" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content contact-modal">
                     <div class="modal-header">
@@ -293,7 +323,8 @@
                         <div class="section-title text-start mb-4"> 問題填寫表單 </div>
                         <form id="contactForm" novalidate>
                             <div class="mb-3"> <label for="cEmail" class="form-label"> Email </label> <input
-                                    type="email" class="form-control" id="cEmail" placeholder="請輸入您的 Email" required>
+                                    type="email" class="form-control" id="cEmail" placeholder="請輸入您的 Email"
+                                    required>
                                 <div class="invalid-feedback"> 請輸入正確的 Email </div>
                             </div>
                             <div class="mb-3"> <label for="cType" class="form-label"> 問題類型 </label> <select
@@ -307,16 +338,17 @@
                                 </select>
                                 <div class="invalid-feedback"> 請選擇問題類型 </div>
                             </div>
-                            <div class="mb-3"> <label for="cSubject" class="form-label"> 主旨 </label> <input type="text"
-                                    class="form-control" id="cSubject" placeholder="請輸入問題主旨" required>
+                            <div class="mb-3"> <label for="cSubject" class="form-label"> 主旨 </label> <input
+                                    type="text" class="form-control" id="cSubject" placeholder="請輸入問題主旨"
+                                    required>
                                 <div class="invalid-feedback"> 請輸入主旨 </div>
                             </div>
-                            <div class="mb-3"> <label for="cMessage" class="form-label"> 內文 </label> <textarea
-                                    class="form-control" id="cMessage" rows="6" placeholder="請詳細描述您遇到的問題..."
-                                    required></textarea>
+                            <div class="mb-3"> <label for="cMessage" class="form-label"> 內文 </label>
+                                <textarea class="form-control" id="cMessage" rows="6" placeholder="請詳細描述您遇到的問題..." required></textarea>
                                 <div class="invalid-feedback"> 請輸入問題內容 </div>
                             </div>
-                            <div class="text-end"> <button type="button" class="btn-submit-contact" id="submitBtn"> 送出
+                            <div class="text-end"> <button type="button" class="btn-submit-contact" id="submitBtn">
+                                    送出
                                 </button> </div>
                         </form>
                     </div>
@@ -335,7 +367,7 @@
     <script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
 
 
-    {{--抓活動資料 --}}
+    {{-- 抓活動資料 --}}
     <script>
         const App = {
             delimiters: ['[[', ']]'],
@@ -352,6 +384,54 @@
                 vm.eventList();
             },
             methods: {
+                logout() {
+                    // 先把 this 存起來，因為進到 ajax 的 function 裡面 this 會改變，
+                    // 所以要先存一份給 vm，之後在裡面才能繼續用 vm.xxx 存取 data 的資料
+                    const vm = this;
+                    $.ajax({
+                        url: "/admin/logout",
+                        method: "POST",
+                        dataType: "json",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                        },
+                        //驗證成功
+                        success: function(response) {
+                            console.log(response);
+                            vm.loading = false;
+
+                            if (response.success) {
+                                Swal.fire({
+                                    title: "登出成功",
+                                    text: "已登出",
+                                    icon: "success",
+                                    timer: 1000,
+                                    showConfirmButton: false
+                                }).then(() => {
+                                    location.href = "/home";
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: "登出失敗",
+                                    text: "請稍後再試",
+                                    icon: "error"
+                                });
+                            }
+
+                        },
+                        //系統錯誤
+                        error: function(error) {
+                            console.log(error);
+                            Swal.fire({
+                                title: "發生錯誤",
+                                text: "請稍後再試",
+                                icon: "error"
+                            });
+
+                        }
+
+                    })
+                },
                 eventList() {
                     const vm = this;
                     fetch('/data/eventlist.json')
@@ -391,7 +471,7 @@
         Vue.createApp(App).mount("#app");
     </script>
 
-    {{--banner輪播 --}}
+    {{-- banner輪播 --}}
     <script>
         // 取得所有輪播圖片
         let banners = document.querySelectorAll(".hero-banner");

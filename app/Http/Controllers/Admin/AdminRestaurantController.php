@@ -70,10 +70,10 @@ class AdminRestaurantController extends Controller
         // 排序方式
         $rank = $req->input('rank');
         switch ($rank) {
-            case '景點編號（小到大）':
+            case '景點編號（小->大）':
                 $query->orderBy('Restaurantid');
                 break;
-            case '名稱 (筆劃少到多)':
+            case '名稱 (筆劃少->多)':
                 $query->orderBy('RestaurantName');
                 break;
             case '最新上架':
@@ -91,7 +91,7 @@ class AdminRestaurantController extends Controller
         $list = $query->paginate($pageSize)->withQueryString();
 
 
-        // 把 $list 傳到 Restaurant.blade.php
+        // 把 $list 傳-> Restaurant.blade.php
         return view('admin.Restaurant', compact('list'));
     }
 
