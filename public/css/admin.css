@@ -1,0 +1,566 @@
+/* =====================================================
+   中彰投生活圈｜後台 admin 共用樣式
+   說明：搭配 Bootstrap 使用，新增／編輯／刪除一律採用
+        Bootstrap Modal（overlap 彈出視窗）呈現，
+        對應筆記「19. Modal 互動視窗」
+   ===================================================== */
+
+/* ---------- 1. CSS 變數（與前台同色系，維持品牌一致） ---------- */
+:root {
+  --color-primary-dark: #1f3d2c;
+  /* Sidebar / Topbar / 登入頁左側 */
+  --color-primary: #4a7c59;
+  /* 手動新增背景色 */
+  --color-secondary: #5c9e74;
+  /* 按鈕、啟用中選單 */
+  --color-primary-light: #e8f0e9;
+  /* 表格 hover / 淡底色 */
+  --color-accent: #e0824f;
+
+  --color-bg: #f7f5ef;
+  /* 後台內容區底色 */
+  --color-card-bg: #ffffff;
+  --color-sidebar-primary:rgb(237,228,213);
+  --color-sidebar-light:#d7e4da;
+  --color-sidebar-green:#4b9c69;
+  --color-sidebar-text: #d7e4da;
+  --color-sidebar-dark: #136e24;
+  --color-sidebar-hover: #3d6b4c;
+
+  
+
+  --color-text: #2b2b2b;
+  --color-text-secondary: #8d8c8c;
+  --color-text-light:#cdcbcb;
+
+  --color-border: #e3e0d6;
+  --color-danger: #c0533f;
+  /* 刪除按鈕 */
+  --color-warning: #d99a3d;
+
+  --font-family: "Noto Sans TC", "微軟正黑體", sans-serif;
+  --font-size-h1: 24px;
+  --font-size-h2: 18px;
+  --font-size-body: 14px;
+  --font-size-small: 12px;
+
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 40px;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-pill: 20px;
+  --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-size: var(--font-size-body);
+}
+
+/* ---------- 2. 後台整體版面（Sidebar + 內容區） ---------- */
+	/* 後台最上方深綠色列（返回首頁、管理員登出）.admin-topbar */
+.admin-topbar {
+  height: 52px;
+  background-color: var(--color-primary-dark);
+  color: #fff;
+  padding: var(--spacing-md) var(--spacing-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* 固定在上方 */
+  position: fixed;  /* 平常正常排版，捲動到指定位置時自動轉為固定，黏住不動 */
+  top: 0;             /* 指定「黏住的位置」：距離視窗頂端 0px 時就停住 */
+  width: 100%;        /* fixed 元素預設不會自動撐滿寬度，要補上 */
+  z-index: 1000;      /* 控制堆疊順序，數字越大越蓋在其他元素上面（不一定要最高，只要比會重疊的元素高即可）*/
+}
+.admin-topbar a{
+  font-size: var(--font-size-small);
+}
+/* 「管理員登出」按鈕 .btn-logout */
+.admin-topbar .btn-logout {
+  background-color: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 6px 16px;
+  margin-left: 5%;
+  font-size: var(--font-size-small);
+}
+/* 後台整體版面容器（Sidebar + 內容區）.admin-layout */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+}
+/* 左側深綠色選單欄整體 .admin-sidebar */
+.admin-sidebar {
+  width: 242px;
+  height: calc(100vh - 52px);
+  background-color: var(--color-card-bg);
+  color: var(--color-sidebar-text);
+  padding: var(--spacing-md) var(--spacing-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border-style:solid;
+  border-width: 0.5px;
+  font-size: large;
+  position: fixed;
+  top: 52px;
+  z-index: 800;
+  
+}
+/* 側邊欄「數據總覽」標題.sidebar-title */
+.admin-sidebar .sidebar-title {
+  font-weight: bold;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+  text-align: start;
+  
+}
+
+.admin-sidebar .sidebar-title:hover{
+  background-color: var(--color-sidebar-primary);
+}
+
+/* 側邊欄「景點管理／旅宿管理／餐飲管理」綠色按鈕.sidebar-nav-btn */
+.admin-sidebar .sidebar-nav .sidebar-nav-btn {
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background-color: var(--color-sidebar-green);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  margin-bottom: var(--spacing-xs);
+}
+
+.admin-sidebar .sidebar-nav-btn:hover {
+  background-color: var(--color-sidebar-hover);
+  
+}
+
+  /* 展開時（透過 aria-expanded 控制），維持深色狀態 */
+.admin-sidebar .sidebar-nav-btn[aria-expanded="true"]{
+    background:var(--color-sidebar-hover);
+  }
+
+ /* 沒有 .collapsed = 展開 → 箭頭轉向 */
+.admin-sidebar .sidebar-nav-btn[aria-expanded="true"]  .fa-chevron-up{
+  transform:rotate(180deg);
+}
+
+
+/* 下拉展開後的子選單（景點列表 / 景點分類...） */
+.admin-sidebar .sidebar-submenu {
+  list-style: none;
+  padding: 6px 0;
+  margin: 6px 0 10px 0; /* 跟下一個按鈕留點距離 */ 
+  font-size: var(--font-size-body);
+}
+.admin-sidebar .sidebar-submenu a {
+  display: block;
+  background-color: var(--color-card-bg);
+  color: var(--color-text-secondary);
+  padding: 8px 16px;
+  
+  border-radius: var(--radius-sm);
+}
+
+
+.admin-sidebar .sidebar-submenu a:hover  {
+  background-color: var(--color-sidebar-primary);
+  color: var(--color-sidebar-green);
+}
+/* 側邊欄底部「已登入／帳號／© 2025」文字 .sidebar-footer */
+.admin-sidebar .sidebar-footer {
+  margin-top: auto;
+  margin-left: 5%;
+  font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  padding-top: var(--spacing-sm);
+
+}
+/* me分隔線 */
+.admin-sidebar .sidebar-footer hr{
+  /* 固定位置 */
+  height: 2px;
+  border: none;
+  background-color: var(--color-sidebar-dark) ;
+}
+/* 右側主要內容區容器 */
+.admin-content {
+  flex: 1;
+  margin-top: 58px ;
+  margin-left: 242px; /* 補上，對齊 sidebar 寬度 */
+  padding: var(--spacing-xs);
+  min-width: 0;
+}
+/* 內容區上方「後台管理 / 景點列表」麵包屑 */
+.admin-breadcrumb {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-small);
+}
+/* 頁面大標題 */
+.admin-page-title {
+  font-size: var(--font-size-h1);
+  font-weight: bold;
+  margin-top: 2%;
+}
+/* 下方說明小字 */
+.admin-page-desc {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-small);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* ---------- 3. 篩選列 + 新增按鈕 ---------- */
+.admin-filter-bar {
+  display: flex;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-sm);
+}
+
+.admin-filter-bar .form-select,
+.admin-filter-bar .form-control {
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-small);
+
+}
+/* 「＋新增」深綠色按鈕 */
+.btn-add {
+  background-color: var(--color-primary-dark);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 8px 18px;
+  font-size: var(--font-size-small);
+}
+
+/* ---------- 4. 資料表格 ---------- */
+.admin-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+.admin-table {
+  width: 100%;
+  min-width: 1800px;
+  background-color: var(--color-card-bg);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-top: 1%;
+  box-shadow: var(--shadow-card);
+  
+}
+
+.admin-table thead {
+  background-color: #f1ece0;
+}
+
+.admin-table th {
+  font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
+  padding: 12px 16px;
+  text-align: left;
+}
+
+.admin-table td {
+  word-break: break-all;
+  padding: 12px 16px;
+  border-top: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.admin-table tbody tr:hover {
+  background-color: var(--color-primary-light);
+}
+/* 表格每列左側小縮圖 */
+.admin-table .row-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+}
+
+/* 表格內的操作按鈕：編輯／刪除（小 pill） */
+.btn-row-edit,
+.btn-row-delete {
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 4px 14px;
+  font-size: var(--font-size-small);
+}
+
+.btn-row-edit {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary-dark);
+}
+
+.btn-row-delete {
+  background-color: #f5e2dd;
+  color: var(--color-danger);
+}
+
+/* ---------- 5. 分頁元件 ---------- */
+
+/* 分頁外層 */
+.pagination {
+    margin-top: 20px;
+    gap: 2px;
+    flex:auto;
+    align-items: center;
+    justify-content: center;
+
+}
+
+/* 分頁按鈕 */
+.pagination .page-link {
+    color: #333;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+/* 滑鼠移過去 */
+.pagination .page-link:hover {
+    color: #fff;
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+/* 目前所在頁面 */
+.pagination .active .page-link {
+    color: #fff;
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+/* 上一頁、下一頁 */
+.pagination .page-link {
+    min-width: 40px;
+    text-align: center;
+}
+
+/* ---------- 6. Dashboard 首頁（數據總覽） ---------- */
+.stat-card {
+  background-color: var(--color-card-bg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.stat-card .stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-card .stat-number {
+  font-size: 26px;
+  font-weight: bold;
+  color: var(--color-primary-dark);
+}
+
+.stat-card .stat-label {
+  font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
+}
+
+.chart-card {
+  background-color: var(--color-card-bg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: var(--spacing-sm);
+}
+
+.chart-card .chart-title {
+  font-weight: bold;
+  font-size: var(--font-size-h2);
+}
+
+.chart-card .chart-desc {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-small);
+  margin-bottom: var(--spacing-xs);
+}
+
+/* ---------- 7. 登入頁（左右分割） ---------- */
+/* 登入頁整體左右分割容器.login-split／左側深綠介紹.login-split／右側表單.login-split */
+.login-split {
+  display: flex;
+  min-height: 100vh;
+}
+
+.login-split .login-left {
+  /* 佔頁面一半flex:1表示拆一區塊為左側區塊 */
+  flex: 1;
+  background-color: var(--color-primary-dark);
+  color: #fff;
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  justify-content: top;
+
+}
+
+/* me手動新增項目，建立一文字框時標題跟內文固定在框裡 */
+.login-split .login-left .login-box {
+  margin-left: 20%;
+  margin-right: 20%;
+  margin-top: 30%;
+
+}
+
+.login-split .login-left h1 {
+  font-size: 28px;
+  font-weight: bold;
+  /* me 調整兩個標題的高度大小 */
+  line-height: 1.2;
+}
+
+.login-split .login-left p {
+  color: #cfe0d4;
+  margin-top: var(--spacing-sm);
+}
+
+.login-split .login-left small {
+  position: fixed;
+  bottom: 10px;
+  left: 0;
+}
+
+
+
+.login-split .login-right {
+  /* 佔頁面一半flex:1表示拆一區塊為右側區塊，me 改設成1.25讓右邊的框大於左邊 */
+  flex: 1.25;
+  background-color: var(--color-bg);
+  padding: var(--spacing-lg);
+  display: flex;
+  /* Flex 的排列方向改成「由上到下」 */
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* me 新增控制輸入帳密的區塊位置 */
+.login-split .login-right .login-keyin {
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.login-split .login-right a {
+  margin-left: 80%;
+  color: var(  --color-sidebar-green);
+}
+
+/* me 新增調整小字的顏色 */
+.login-split .login-right small {
+  color: var(--color-primary);
+}
+/* 登入頁帳號密碼表單.login-form */
+.login-form{
+  margin-bottom: var(--spacing-lg);
+}
+
+.login-form label {
+  font-weight: bold;
+  font-size: var(--font-size-small);
+}
+
+.login-form .form-control {
+  border-radius: var(--radius-sm);
+  padding: 12px;
+}
+/* 「登入」按鈕.btn-login */
+.login-form .btn-login {
+  background-color: var(--color-primary-dark);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: bold;
+}
+
+/* me 帳密都要輸入按鈕才可以點擊，變enable時顏色調深 */
+.login-form .btn-login:disabled {
+  background-color: var(--color-secondary);
+  color: #fff;
+}
+
+/* ---------- 8. 新增／編輯／刪除 Modal（overlap 覆蓋層） ---------- */
+/* 對應需求：新增/刪除/修改採 overlap 方式 -> 使用 Bootstrap Modal
+   這裡只補充品牌樣式，結構與開關邏輯交給 Bootstrap 的
+   data-bs-toggle="modal" / data-bs-target="#xxxModal" 處理 */
+.modal-content.admin-modal {
+  border-radius: var(--radius-md);
+  border: none;
+}
+/* 	Modal 標題列（深綠底、白字） */
+.admin-modal .modal-header {
+  background-color: var(--color-primary-dark);
+  color: #fff;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.admin-modal .modal-header .btn-close {
+  filter: invert(1);
+}
+
+.admin-modal .modal-footer .btn-primary {
+  background-color: var(--color-primary);
+  border: none;
+}
+
+.admin-modal .modal-footer .btn-danger {
+  background-color: var(--color-danger);
+  border: none;
+}
+
+/* ---------- 9. 統計圖尺寸 ---------- */
+.chart-container {
+        display: flex;
+        height: 350px; /* 依需求調整，圓餅圖建議正方形比例會比較好看 */
+    }
+
+.chart-container canvas {
+        max-width: 350px;
+        margin: 0 auto;
+  }
+
+/* ---------- 10. RWD ---------- */
+@media screen and (max-width: 768px) {
+  .admin-layout {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    width: 100%;
+  }
+
+  .login-split {
+    flex-direction: column;
+  }
+
+  .chart-container {
+        flex-direction: column;
+        height: auto;    /* 垂直排列時高度改自動，避免內容被壓縮 */
+    }
+
+  .chart-container canvas {
+        max-width: 100%;
+        height: 300px;  /* 手機上固定 canvas 高度，避免圓餅圖被壓扁 */
+    }
+}
