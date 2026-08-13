@@ -106,7 +106,7 @@
                 <div class="modal-body">
 
                     <form onsubmit="submitEdit(event, {{ $item->id }})">
-
+                        @csrf
                         <div class="mb-3">
                             <label class="form-label">分類代碼</label>
 
@@ -161,6 +161,7 @@
             <div class="modal-body">
                 {{-- 同樣改用 onsubmit 呼叫 API --}}
                 <form onsubmit="submitAdd(event)">
+                    @csrf
                     <div class="mb-3">
                         <label class="form-label">分類代碼</label>
                         <input type="text" name="attractionClassNo" class="form-control">

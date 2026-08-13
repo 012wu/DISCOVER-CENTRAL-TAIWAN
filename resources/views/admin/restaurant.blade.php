@@ -166,7 +166,7 @@
                 <div class="modal-body">
 
                     <form onsubmit="submitEdit(event, {{$item ->id}})">
-
+                        @csrf
                         <div class="mb-3">
                             <label class="form-label">餐飲編號</label>
                             <input type="text" name="restaurantID" class="form-control"
@@ -180,37 +180,54 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">分類代碼</label>
-                            <input type="text" name="cuisineClassNo" class="form-control"
-                                value="{{ $item->cuisineClassNo }}">
+                            <label class="form-label">分類代碼(請用 "," 隔開)</label>
+                            <input type="text" name="cuisineClassNo" id="editClassNo{{ $item->id }}" class="form-control"
+                                value="{{ $item->cuisineClassNo }}"
+                                onkeyup="lookupClassName('editClassNo{{ $item->id }}', 'editClassName{{ $item->id }}', 'editClassName2{{ $item->id }}')">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">餐飲分類代碼名稱</label>
-                            <input type="text" name="cuisineClassName" class="form-control"
-                                value="{{ $item->cuisineClassName }}">
+                            <label class="form-label">餐飲分類代碼名稱(自動帶入)</label>
+                            <input type="text" name="cuisineClassName" id="editClassName{{ $item->id }}" class="form-control"
+                                value="{{ $item->cuisineClassName }}" readonly>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">餐飲分類代碼名稱_new</label>
-                            <input type="text" name="cuisineClassName2" class="form-control"
-                                value="{{ $item->cuisineClassName2 }}">
+                            <label class="form-label">餐飲分類代碼名稱_new(自動帶入)</label>
+                            <input type="text" name="cuisineClassName2" id="editClassName2{{ $item->id }}" class="form-control"
+                                value="{{ $item->cuisineClassName2 }}" readonly>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">緯度</label>
-                            <input type="text" name="positionLat" class="form-control"
-                                value="{{ $item->positionLat }}">
+                            <input type="text" name="positionLat" id="editPositionLat{{ $item->id }}" class="form-control" required
+                                pattern="-?\d+\.\d+"
+                                placeholder="例如 24.1234"
+                                value="{{ $item->positionLat }}"
+                                oninput="checkDecimalFormat('editPositionLat{{ $item->id }}', 'editLatHint{{ $item->id }}', -90, 90)">
+                            <div id="editLatHint{{ $item->id }}" class="form-text text-muted">請輸入含小數點的數字，例如 24.1234（範圍 -90 ~ 90）</div>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">經度</label>
-                            <input type="text" name="positionLon" class="form-control"
-                                value="{{ $item->positionLon }}">
+                            <input type="text" name="positionLon" id="editPositionLon{{ $item->id }}" class="form-control" required
+                                pattern="-?\d+\.\d+"
+                                placeholder="例如 120.5678"
+                                value="{{ $item->positionLon }}"
+                                oninput="checkDecimalFormat('editPositionLon{{ $item->id }}', 'editLonHint{{ $item->id }}', -180, 180)">
+                            <div id="editLonHint{{ $item->id }}" class="form-text text-muted">請輸入含小數點的數字，例如 120.5678（範圍 -180 ~ 180）</div>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">郵遞區號</label>
-                            <input type="text" name="zipCode" class="form-control"
-                                value="{{ $item->zipCode }}">
+                            <input type="text"
+                                name="zipCode"
+                                class="form-control"
+                                pattern="[0-9]{3,6}"
+                                title="請輸入3~6碼數字郵遞區號"
+                                inputmode="numeric"
+                                value="{{ $item->zipCode }}"
+                                oninput="checkZipCode(this)">
+
+                            <div class="form-text text-muted">請輸入3~6碼數字</div>
                         </div>
 
                         <div class="mb-3">
@@ -233,13 +250,15 @@
 
                         <div class="mb-3">
                             <label class="form-label">電話</label>
-                            <input type="text" name="tel" class="form-control"
+                            <input type="tel" name="tel" class="form-control"
+                                pattern="[0-9()#-]+" title="只能輸入數字、-、()、#"
                                 value="{{ $item->tel }}">
+                            <div class="form-text text-muted">只能輸入數字、-、()、#</div>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">圖片</label>
-                            <input type="text" name="img1" class="form-control"
+                            <input type="url" name="img1" class="form-control" placeholder="https://..."
                                 value="{{ $item->img1 }}">
                         </div>
 
@@ -277,6 +296,7 @@
             </div>
             <div class="modal-body">
                 <form onsubmit="submitAdd(event)">
+                    @csrf
                     <div class="mb-3">
                         <label class="form-label">餐飲編號</label>
                         <input type="text" name="restaurantID" class="form-control">
@@ -287,28 +307,47 @@
                         <input type="text" name="restaurantName" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">分類代碼</label>
-                        <input type="text" name="cuisineClassNo" class="form-control">
+                        <label class="form-label">分類代碼(請用 "," 隔開)</label>
+                        <input type="text" name="cuisineClassNo" id="addClassNo" class="form-control"
+                            onkeyup="lookupClassName('addClassNo', 'addClassName', 'addClassName2')">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">餐飲分類代碼名稱</label>
-                        <input type="text" name="cuisineClassName" class="form-control">
+                        <label class="form-label">餐飲分類代碼名稱(自動帶入)</label>
+                        <input type="text" name="cuisineClassName" id="addClassName" class="form-control" readonly>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">餐飲分類代碼名稱_new</label>
-                        <input type="text" name="cuisineClassName2" class="form-control">
+                        <label class="form-label">餐飲分類代碼名稱_new(自動帶入)</label>
+                        <input type="text" name="cuisineClassName2" id="addClassName2" class="form-control" readonly>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">緯度</label>
-                        <input type="text" name="positionLat" class="form-control">
+                        <input type="text" name="positionLat" id="addPositionLat" class="form-control" required
+                            pattern="-?\d+\.\d+"
+                            placeholder="例如 24.1234"
+                            oninput="checkDecimalFormat('addPositionLat', 'addLatHint', -90, 90)">
+                        <div id="addLatHint" class="form-text text-muted">請輸入含小數點的數字，例如 24.1234（範圍 -90 ~ 90）</div>
                     </div>
+
                     <div class="mb-3">
                         <label class="form-label">經度</label>
-                        <input type="text" name="positionLon" class="form-control">
+                        <input type="text" name="positionLon" id="addPositionLon" class="form-control" required
+                            pattern="-?\d+\.\d+"
+                            placeholder="例如 120.5678"
+                            oninput="checkDecimalFormat('addPositionLon', 'addLonHint', -180, 180)">
+                        <div id="addLonHint" class="form-text text-muted">請輸入含小數點的數字，例如 120.5678（範圍 -180 ~ 180）</div>
                     </div>
+
                     <div class="mb-3">
                         <label class="form-label">郵遞區號</label>
-                        <input type="text" name="zipCode" class="form-control">
+                        <input type="text"
+                            name="zipCode"
+                            class="form-control"
+                            pattern="[0-9]{3,6}"
+                            title="請輸入3~6碼數字郵遞區號"
+                            inputmode="numeric"
+                            oninput="checkZipCode(this)">
+
+                        <div class="form-text text-muted">請輸入3~6碼數字</div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">縣市</label>
@@ -324,11 +363,13 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">電話</label>
-                        <input type="text" name="tel" class="form-control">
+                        <input type="tel" name="tel" class="form-control"
+                            pattern="[0-9()#-]+" title="只能輸入數字、-、()、#">
+                        <div class="form-text text-muted">只能輸入數字、-、()、#</div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">圖片</label>
-                        <input type="text" name="img1" class="form-control">
+                        <input type="url" name="img1" class="form-control" placeholder="https://...">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">詳細描述</label>
@@ -454,6 +495,126 @@
                     });
             }
         });
+    }
+
+
+    // 依輸入的分類代碼，自動查詢分類名稱並填入
+    function lookupClassName(noId, nameId, name2Id) {
+        // 加一個小延遲，避免打太多次 API
+        clearTimeout(window.lookupTimer);
+        window.lookupTimer = setTimeout(() => {
+            const codes = document.getElementById(noId).value;
+
+            if (!codes) {
+                document.getElementById(nameId).value = '';
+                document.getElementById(name2Id).value = '';
+                return;
+            }
+
+            fetch(`/api/restaurantClass/lookup?codes=${codes}`)
+                .then(res => res.json())
+                .then(result => {
+                    if (result.success) {
+                        document.getElementById(nameId).value = result.cuisineClassName;
+                        document.getElementById(name2Id).value = result.cuisineClassName2;
+                    }
+                });
+        }, 500);
+    }
+    // 即時檢查緯度/經度格式（含小數點 + 範圍），並在 input 下方即時顯示提示文字
+    function checkDecimalFormat(inputId, hintId, min, max) {
+        const input = document.getElementById(inputId);
+        const hint = document.getElementById(hintId);
+        const value = input.value;
+
+        if (!value) {
+            hint.textContent = `請輸入含小數點的數字（範圍 ${min} ~ ${max}）`;
+            hint.className = 'form-text text-muted';
+            return;
+        }
+
+        const isFormatValid = /^-?\d+\.\d+$/.test(value);
+        const isRangeValid = isFormatValid && Number(value) >= min && Number(value) <= max;
+
+        if (isFormatValid && isRangeValid) {
+            hint.textContent = '✓ 格式正確';
+            hint.className = 'form-text text-success';
+        } else if (!isFormatValid) {
+            hint.textContent = '✗ 格式錯誤，需為含小數點的數字，例如 24.1234';
+            hint.className = 'form-text text-danger';
+        } else {
+            hint.textContent = `✗ 範圍需介於 ${min} ~ ${max} 之間`;
+            hint.className = 'form-text text-danger';
+        }
+    }
+
+    function checkZipCode(input) {
+        const value = input.value;
+        const hint = input.nextElementSibling;
+
+        if (!value) {
+            hint.textContent = '請輸入3~6碼數字';
+            hint.className = 'form-text text-muted';
+            return;
+        }
+
+        if (!/^\d+$/.test(value)) {
+            hint.textContent = '✗ 只能輸入數字';
+            hint.className = 'form-text text-danger';
+            return;
+        }
+
+        if (value.length < 3) {
+            hint.textContent = '✗ 至少需要3碼';
+            hint.className = 'form-text text-danger';
+            return;
+        }
+
+        if (value.length > 6) {
+            hint.textContent = '✗ 最多只能6碼';
+            hint.className = 'form-text text-danger';
+            return;
+        }
+
+        hint.textContent = '✓ 格式正確';
+        hint.className = 'form-text text-success';
+    }
+
+
+    // 送出前驗證，回傳錯誤訊息字串；沒問題回傳 null
+    function validateAttractionForm(data) {
+        if (!data.attractionID) return '景點編號為必填欄位';
+        if (!data.attractionName) return '名稱為必填欄位';
+        if (!data.attractionClassNo) return '分類代碼為必填欄位';
+
+        if (!data.positionLat || !/^-?\d+\.\d+$/.test(data.positionLat)) {
+            return '緯度格式錯誤，必須為含小數點的數字，例如 24.1234';
+        }
+        if (Number(data.positionLat) < -90 || Number(data.positionLat) > 90) {
+            return '緯度範圍必須介於 -90 到 90 之間';
+        }
+
+        if (!data.positionLon || !/^-?\d+\.\d+$/.test(data.positionLon)) {
+            return '經度格式錯誤，必須為含小數點的數字，例如 120.5678';
+        }
+        if (Number(data.positionLon) < -180 || Number(data.positionLon) > 180) {
+            return '經度範圍必須介於 -180 到 180 之間';
+        }
+
+        if (data.zipCode && (!/^\d+$/.test(data.zipCode) || data.zipCode.length < 3 || data.zipCode.length > 6)) {
+            return '郵遞區號格式錯誤，請輸入3~6碼數字';
+        }
+        if (!data.city) return '縣市為必填欄位';
+        if (data.tel && !/^[0-9()#-]+$/.test(data.tel)) {
+            return '電話格式錯誤，只能輸入數字、-、()、#';
+        }
+        if (data.websiteURL && !/^https?:\/\/.+/.test(data.websiteURL)) {
+            return '網站連結格式錯誤，需以 http:// 或 https:// 開頭';
+        }
+        if (data.img1 && !/^https?:\/\/.+/.test(data.img1)) {
+            return '圖片必須為網址格式，需以 http:// 或 https:// 開頭';
+        }
+        return null;
     }
 </script>
 @endpush

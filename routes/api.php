@@ -15,12 +15,16 @@ Route::post('/attraction', [AdminAttractionController::class, 'store']);  // 新
 Route::put('/attraction/{id}', [AdminAttractionController::class, 'update']); // 修改
 Route::delete('/attraction/{id}', [AdminAttractionController::class, 'destroy']); // 刪除
 
+Route::get('/attractionClass/lookup', [AdminAttractionClassController::class, 'lookup']); //關聯class
+
+
 // 景點分類 CRUD
 Route::get('/attractionClass', [AdminAttractionClassController::class, 'index']);
 Route::get('/attractionClass/{id}', [AdminAttractionClassController::class, 'show']);
 Route::post('/attractionClass', [AdminAttractionClassController::class, 'store']);
 Route::put('/attractionClass/{id}', [AdminAttractionClassController::class, 'update']);
 Route::delete('/attractionClass/{id}', [AdminAttractionClassController::class, 'destroy']);
+
 
 
 // 旅宿 CRUD
@@ -30,7 +34,7 @@ Route::post('/hotel', [AdminHotelController::class, 'store']);  // 新增
 Route::put('/hotel/{id}', [AdminHotelController::class, 'update']); // 修改
 Route::delete('/hotel/{id}', [AdminHotelController::class, 'destroy']); // 刪除
 
-
+Route::get('/hotelClass/lookup', [AdminHotelClassController::class, 'lookup']); //關聯class
 
 // 旅宿分類 CRUD
 Route::get('/hotelClass', [AdminHotelClassController::class, 'index']); // 查全部
@@ -41,6 +45,8 @@ Route::delete('/hotelClass/{id}', [AdminHotelClassController::class, 'destroy'])
 
 
 
+
+
 // 餐廳 CRUD
 Route::get('/restaurant', [AdminRestaurantController::class, 'index']); // 查全部
 Route::get('/restaurant/{id}', [AdminRestaurantController::class, 'show']);  // 查單筆
@@ -48,7 +54,7 @@ Route::post('/restaurant', [AdminRestaurantController::class, 'store']);  // 新
 Route::put('/restaurant/{id}', [AdminRestaurantController::class, 'update']); // 修改
 Route::delete('/restaurant/{id}', [AdminRestaurantController::class, 'destroy']); // 刪除
 
-
+Route::get('/restaurantClass/lookup', [AdminRestaurantClassController::class, 'lookup']); //關聯class
 
 // 餐廳分類 CRUD
 Route::get('/restaurantClass', [AdminRestaurantClassController::class, 'index']); // 查全部

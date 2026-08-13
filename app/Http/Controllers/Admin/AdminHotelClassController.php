@@ -132,4 +132,32 @@ class AdminHotelClassController extends Controller
             "msg" => "已刪除"
         ]);
     }
+
+    // GET /api/hotelClass/lookup?codes=A01,A02
+    public function lookup(Request $req)
+    {
+        // 使用者輸入的分類代碼，例如 "A01,A02"
+        $codes = $req->input('codes');
+
+        // 用逗號分開
+        $classNos = explode(',', $codes);
+
+        // 去掉空白
+        $classNos = array_map('trim', $classNos);
+
+        // 到分類表查詢
+        $classes = AdminHotelClass::whereIn('hotelClassNo', $classNos)->get();
+
+        // 組合分類名稱
+        $className = $classes->pluck('hotelClassName')->implode(',');
+
+        // 組合分類名稱2
+        $className2 = $classes->pluck('hotelClassName2')->implode(',');
+
+        return response()->json([
+            'success' => true,
+            'hotelClassName' => $className,
+            'hotelClassName2' => $className2
+        ]);
+    }
 }

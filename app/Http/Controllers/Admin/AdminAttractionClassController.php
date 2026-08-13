@@ -46,12 +46,12 @@ class AdminAttractionClassController extends Controller
 
         // 關鍵字篩選：比對名稱與詳細描述
         $keyword = $req->input('keyword');
-        
+
         if (!empty($keyword)) {
             $query->where(function ($q) use ($keyword) {
-            $q->where('attractionClassNo', 'like', "%{$keyword}%")
-                ->orWhere('attractionClassName', 'like', "%{$keyword}%")
-                ->orWhere('attractionClassName2', 'like', "%{$keyword}%");
+                $q->where('attractionClassNo', 'like', "%{$keyword}%")
+                    ->orWhere('attractionClassName', 'like', "%{$keyword}%")
+                    ->orWhere('attractionClassName2', 'like', "%{$keyword}%");
             });
         }
         // 排序方式
@@ -78,7 +78,7 @@ class AdminAttractionClassController extends Controller
         $list = $query->paginate($pageSize)->withQueryString();
         // 把 $list 傳-> attractionClass.blade.php
         return view('admin.attractionClass', compact('list'));
-        }
+    }
 
 
     // POST /api/attractionClass - 新增分類
@@ -86,19 +86,18 @@ class AdminAttractionClassController extends Controller
     {
         $attraction = AdminAttractionClass::create($request->all());
 
-        
+
         return response()->json([
             "success" => true,
             "msg" => "已新增"
         ]);
-
     }
 
     // PUT /api/attractionClass/{id} - 更新分類
     public function update(Request $request, $id)
     {
         $attractionClass = AdminAttractionClass::find($id);
-       
+
         if (!$attractionClass) {
             return response()->json([
                 'success' => false,
@@ -132,6 +131,33 @@ class AdminAttractionClassController extends Controller
             "success" => true,
             "msg" => "已刪除"
         ]);
+    }
 
+    // GET /api/attractionClass/lookup?codes=A01,A02
+    public function lookup(Request $req)
+    {
+        // 使用者輸入的分類代碼，例如 "A01,A02"
+        $codes = $req->input('codes');
+
+        // 用逗號分開
+        $classNos = explode(',', $codes);
+
+        // 去掉空白
+        $classNos = array_map('trim', $classNos);
+
+        // 到分類表查詢
+        $classes = AdminAttractionClass::whereIn('attractionClassNo', $classNos)->get();
+
+        // 組合分類名稱
+        $className = $classes->pluck('attractionClassName')->implode(',');
+
+        // 組合分類名稱2
+        $className2 = $classes->pluck('attractionClassName2')->implode(',');
+
+        return response()->json([
+            'success' => true,
+            'attractionClassName' => $className,
+            'attractionClassName2' => $className2
+        ]);
     }
 }

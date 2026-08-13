@@ -28,6 +28,7 @@ class AdminController extends Controller
         $pwd = $req->pwd;
 
         // 到 staff 資料表找帳號
+        //參數化查詢
         $staff = DB::table('staff')
             ->where('account', $account)
             ->first();

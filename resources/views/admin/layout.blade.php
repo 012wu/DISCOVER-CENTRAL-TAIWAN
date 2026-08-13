@@ -25,7 +25,7 @@
             {{-- router-link點擊導到首頁 --}}
             <a href="/home"><i class="fa-solid fa-left-long"></i> 返回首頁</a>
             @if (!empty(session()->get('account')))
-                <button class="btn-logout" @click="logout">管理員登出</button>
+            <button class="btn-logout" @click="logout">管理員登出</button>
             @endif
         </div>
         {{-- 將sidebar跟右邊內文並台再一起，父層為layout 用flex --}}

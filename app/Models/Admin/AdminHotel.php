@@ -32,4 +32,24 @@ class AdminHotel extends Model
         'createTime',
         'updateTime'
     ];
+
+    // 單一 hotelClassNo 時使用
+    public function hotelClass()
+    {
+        return $this->belongsTo(
+            AdminHotelClass::class, // 要連哪個 Model
+            'hotelClassNo',         // hotel 表的欄位
+            'hotelClassNo'          // hotelClass 表的欄位
+        );
+    }
+    // 多個 hotelClassNo 時使用
+    public function getHotelClassList()
+    {
+        $classNos = explode(',', $this->hotelClassNo);
+
+        return AdminHotelClass::whereIn(
+            'hotelClassNo',
+            $classNos
+        )->get();
+    }
 }

@@ -103,7 +103,7 @@
                 <div class="modal-body">
 
                     <form onsubmit="submitEdit(event, {{ $item->id }})">
-
+                        @csrf
                         <div class="mb-3">
                             <label class="form-label">分類代碼</label>
 
@@ -158,17 +158,18 @@
             <div class="modal-body">
                 {{-- 同樣改用 onsubmit 呼叫 API --}}
                 <form onsubmit="submitAdd(event)">
+                    @csrf
                     <div class="mb-3">
                         <label class="form-label">分類代碼</label>
-                        <input type="text" name="restaurantClassNo" class="form-control">
+                        <input type="text" name="cuisineClassNo" class="form-control">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">餐飲分類代碼名稱</label>
-                        <input type="text" name="restaurantClassName" class="form-control">
+                        <input type="text" name="cuisineClassName" class="form-control">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">餐飲分類代碼名稱_網頁</label>
-                        <input type="text" name="restaurantClassName2" class="form-control">
+                        <input type="text" name="cuisineClassName2" class="form-control">
                     </div>
                     <button type="submit" class="btn btn-primary me-2">新增</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>

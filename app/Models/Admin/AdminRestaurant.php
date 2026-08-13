@@ -28,4 +28,23 @@ class Adminrestaurant extends Model
         'createTime',
         'updateTime'
     ];
+    // 單一 attractionClassNo 時使用
+    public function restaurantClass()
+    {
+        return $this->belongsTo(
+            AdminRestaurantClass::class, // 要連哪個 Model
+            'cuisineClassNo',         // attraction 表的欄位
+            'cuisineClassNo'          // attractionClass 表的欄位
+        );
+    }
+    // 多個 attractionClassNo 時使用
+    public function getAttractionClassList()
+    {
+        $classNos = explode(',', $this->cuisineClassNo);
+
+        return AdminRestaurantClass::whereIn(
+            'cuisineClassNo',
+            $classNos
+        )->get();
+    }
 }

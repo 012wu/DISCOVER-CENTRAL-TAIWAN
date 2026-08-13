@@ -48,7 +48,10 @@
                 {{-- 搜尋框 --}}
                 <div class="search-box">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" placeholder="關鍵字搜尋" v-model="keyword">
+                    <input type="text"
+                        placeholder="關鍵字搜尋"
+                        v-model="keyword"
+                        @input="searchData">
                 </div>
             </div>
 
@@ -89,13 +92,13 @@
                         <a href="/about">關於我們</a>
                         <a href="#" data-bs-toggle="modal" data-bs-target="#contactModal">聯絡我們</a>
                         @if (empty(session()->get('account')))
-                            <a href="/admin/login" class="admin-link">管理員登入</a>
+                        <a href="/admin/login" class="admin-link">管理員登入</a>
                         @endif
                         @if (!empty(session()->get('account')))
-                            <a href="#" class="admin-link" @click="logout">管理員登出</a>
+                        <a href="#" class="admin-link" @click="logout">管理員登出</a>
                         @endif
                         @if (!empty(session()->get('account')))
-                            <a href="/admin/adminhome" class="admin-link">後臺管理系統</a>
+                        <a href="/admin/adminhome" class="admin-link">後臺管理系統</a>
                         @endif
                     </div>
                 </div>
